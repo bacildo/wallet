@@ -1,11 +1,7 @@
-import Login from "./pages/Login";
+import { Outlet } from "react-router-dom";
 
 function App() {
-  return (
-    <main className="flex items-center justify-center h-screen">
-      <Login />
-    </main>
-  );
+  return <Outlet />;
 }
 
 export default App;
