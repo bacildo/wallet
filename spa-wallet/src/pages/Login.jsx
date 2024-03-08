@@ -3,21 +3,11 @@ import wallet from "../assets/wallet.png";
 import Button from "../components/Button";
 import Input from "../components/Input";
 import { useForm } from "react-hook-form";
-import z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import ErrorsInput from "../components/ErrorsInput";
-
-const loginSchema = z.object({
-  email: z
-    .string()
-    .min(1, "O campo email é obrigatório!")
-    .email("Email inválido!")
-    .toLowerCase(),
-  password: z
-    .string()
-    .min(6, "A senha deve possuir no mínimo 6 caracteres!")
-    .max(12, "A senha deve possuir no máximo 12 caracteres!"),
-});
+import { loginSchema } from "../schemas/Login";
+import { loginUser } from "../services/User";
+import Cookies from "js-cookie";
 
 export default function Login() {
   const {
@@ -26,8 +16,13 @@ export default function Login() {
     formState: { errors },
   } = useForm({ resolver: zodResolver(loginSchema) });
 
-  function handleForm(data) {
-    console.log(data);
+  async function handleForm(data) {
+    try {
+      const token = await loginUser(data);
+      Cookies.set("token", token.data, { expires: 1 });
+    } catch (error) {
+      console.log(error.message);
+    }
   }
 
   return (
