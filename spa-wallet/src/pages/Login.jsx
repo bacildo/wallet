@@ -1,13 +1,13 @@
-import { Link } from "react-router-dom";
+import { zodResolver } from "@hookform/resolvers/zod";
+import Cookies from "js-cookie";
+import { useForm } from "react-hook-form";
+import { Link, useNavigate } from "react-router-dom";
 import wallet from "../assets/wallet.png";
 import Button from "../components/Button";
-import Input from "../components/Input";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
 import ErrorsInput from "../components/ErrorsInput";
+import Input from "../components/Input";
 import { loginSchema } from "../schemas/Login";
 import { loginUser } from "../services/User";
-import Cookies from "js-cookie";
 
 export default function Login() {
   const {
@@ -16,10 +16,13 @@ export default function Login() {
     formState: { errors },
   } = useForm({ resolver: zodResolver(loginSchema) });
 
+  const navigate = useNavigate();
+
   async function handleForm(data) {
     try {
       const token = await loginUser(data);
       Cookies.set("token", token.data, { expires: 1 });
+      navigate("/");
     } catch (error) {
       console.log(error.message);
     }
