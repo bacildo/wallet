@@ -12,7 +12,7 @@ export default function Button({ title, type, icon, transaction }) {
     <button
       type={type}
       className="rounded w-full font-bold text-white text-2xl bg-gradient-to-r from-[#00bfff] to-[#00ff14] flex items-center justify-center gap-2"
-      onClick={ () => transaction && navigate(`/transaction/${transaction}`)}
+      onClick={ () => transaction && navigate(`/transactions/${transaction}`)}
     >
       {SelectIconComponent && <SelectIconComponent />} {title}
     </button>

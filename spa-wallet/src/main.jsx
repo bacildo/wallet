@@ -6,11 +6,13 @@ import Login from "./pages/Login.jsx";
 import Register from "./pages/Register.jsx";
 import Home from "./pages/Home.jsx";
 import Transaction from "./pages/Transaction.jsx";
+import ErrorPage from "./pages/ErrorPage.jsx";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <Home />,
+    errorElement:<ErrorPage/>,
   },
   {
     path: "/login",
@@ -21,7 +23,7 @@ const router = createBrowserRouter([
     element: <Register />,
   },
   {
-    path: "/transaction/:param",
+    path: "/transactions/:param",
     element: <Transaction/>
   }
 ]);

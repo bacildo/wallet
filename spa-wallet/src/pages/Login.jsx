@@ -8,6 +8,7 @@ import ErrorsInput from "../components/ErrorsInput";
 import Input from "../components/Input";
 import { loginSchema } from "../schemas/Login";
 import { loginUser } from "../services/User";
+import { useEffect, useState } from "react";
 
 export default function Login() {
   const {
@@ -18,19 +19,28 @@ export default function Login() {
 
   const navigate = useNavigate();
 
+  const [errorsApi, setErrorsApi] = useState("");
+
   async function handleForm(data) {
     try {
       const token = await loginUser(data);
       Cookies.set("token", token.data, { expires: 1 });
       navigate("/");
     } catch (error) {
+      setErrorsApi(error.message);
       console.log(error.message);
     }
   }
 
+  useEffect(()=>{
+    Cookies.remove("token")
+  })
+
   return (
     <div className="flex flex-col items-center justify-around bg-zinc-900 rounded p-8 w-[35rem] h-[35rem]">
       <img src={wallet} alt="" className="w-44" />
+      {errorsApi && <ErrorsInput message={errorsApi} />}
+
       <form
         onSubmit={handleSubmit(handleForm)}
         className="flex flex-col items-center justify-center gap-4 w-full text-2xl"

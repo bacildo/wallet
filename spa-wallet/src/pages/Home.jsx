@@ -7,12 +7,14 @@ import wallet from "../assets/wallet.png";
 import Button from "../components/Button";
 import { getAllTransactions } from "../services/Transactions";
 import { loggedIn } from "../services/User";
+import ErrorsInput from "../components/ErrorsInput";
 
 export default function Home() {
   const navigate = useNavigate();
   const [userData, setUserData] = useState({});
   const [transactions, setTransactions] = useState([]);
   const [balance, setBalance] = useState(0);
+  const [errorsApi, setErrorsApi] = useState("");
 
   function tokenValidate() {
     const token = Cookies.get("token");
@@ -24,6 +26,7 @@ export default function Home() {
       const user = await loggedIn();
       setUserData(user.data);
     } catch (error) {
+      setErrorsApi(error.message);
       console.error(error.message);
     }
   }
@@ -34,6 +37,7 @@ export default function Home() {
       setTransactions(response.data);
       calculateBalance(response.data);
     } catch (error) {
+      setErrorsApi(error.message);
       console.error(error.message);
     }
   }
@@ -56,6 +60,8 @@ export default function Home() {
 
   return (
     <main className="flex flex-col items-center justify-center bg-zinc-900 rounded p-8 w-[60rem] h-[35rem] text 2xl">
+      {errorsApi && <ErrorsInput message={errorsApi} />}
+
       <header className="flex items-center justify-between w-full pb-4">
         <img src={wallet} alt="" className="w-32"></img>
         <div className="flex items-center gap-4 text-white text-2xl">
