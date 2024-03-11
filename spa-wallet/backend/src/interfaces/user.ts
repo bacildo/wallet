@@ -5,6 +5,18 @@ export interface IPeople {
   profissao: string;
 }
 
+export interface IUser {
+  name: string;
+  email: string;
+  password: string;
+  created_at: Date;
+}
+
+export interface ILogin {
+  email: string;
+  password: string;
+}
+
 export const notFoundPeople = (): IPeople => {
   return {
     nome: "",

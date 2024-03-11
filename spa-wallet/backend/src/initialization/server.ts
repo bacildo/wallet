@@ -18,10 +18,12 @@ export class Server {
         skipMissingProperties: true,
         validationError: { target: false, value: false },
       },
+      middlewares: [express.json(), express.urlencoded({ extended: true })],
     });
+  
     console.log("Server Initialized");
   }
-
+     
   start(): void {
     if (!this.app) {
       console.error('Express application not initialized. Call init() before start().');

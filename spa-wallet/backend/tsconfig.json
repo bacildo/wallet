@@ -23,7 +23,8 @@
     "skipLibCheck": true,
     "declaration": true,
     "sourceMap": true,
-    "pretty": true
+    "pretty": true,
+    
   },
   "include": ["src/**/*.ts"],
   "exclude": ["node_modules", "dist", "docs", "__tests__"]

@@ -1,1 +1,1 @@
-export * from './mongodb/people'
+export * from './mongodb/user'

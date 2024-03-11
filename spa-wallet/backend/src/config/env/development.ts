@@ -13,6 +13,9 @@ export const mongoOptions: DataSourceOptions = {
   entities: [`${sourcepath}/entities/mongodb/*.{js,ts}`],
 };
 
+export const configSecret = {
+  secret:'SECRET'
+}
 
 export const databaseEnabled ={
   mysqlOptions: false,
