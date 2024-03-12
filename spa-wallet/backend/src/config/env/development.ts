@@ -1,5 +1,6 @@
 import { resolve } from 'path';
 import { DataSourceOptions } from 'typeorm';
+import { createClient } from 'redis';
 export const sourcepath = resolve(__dirname, '../../');
 
 export const mongoOptions: DataSourceOptions = {
@@ -16,6 +17,13 @@ export const mongoOptions: DataSourceOptions = {
 export const configSecret = {
   secret:'SECRET'
 }
+
+export const redisOptions = {
+  host: 'localhost',
+  port: 6379,
+};
+
+export const redisClient = createClient(redisOptions as any);
 
 export const databaseEnabled ={
   mysqlOptions: false,

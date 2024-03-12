@@ -1,7 +1,7 @@
 import axios from "axios";
 import Cookies from "js-cookie";
 
-const BASE_URL = "http://localhost:3000";
+const BASE_URL = "http://localhost:3000/api";
 
 export function registerUser(data) {
   delete data.confirmPassword;
@@ -10,7 +10,7 @@ export function registerUser(data) {
 }
 
 export function loginUser(data) {
-  const response = axios.post(`${BASE_URL}/login`, data);
+  const response = axios.post(`${BASE_URL}/user-login`, data);
   return response;
 }
 

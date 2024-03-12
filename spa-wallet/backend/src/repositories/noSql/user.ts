@@ -1,31 +1,53 @@
+import jwt from "jsonwebtoken";
+import { ObjectId } from "mongodb";
 import { Service } from "typedi";
+import { configSecret } from "../../config";
 import { UserEntity } from "../../entities";
 import { Database } from "../../initialization";
 import { Abstract } from "../abstract/abstract";
-import { ObjectId } from "mongodb";
-import jwt from "jsonwebtoken";
-import { configSecret } from "../../config";
 
 @Service()
 export class UserRepository extends Abstract<UserEntity> {
   constructor() {
     super(Database.mongo, UserEntity);
   }
-  async findUserById(id: ObjectId): Promise<UserEntity[]> {
-    try {
-      const result = await this.mongoRepository.find({
-        select: ["email", "password", "created_at", "name"],
-        where: { _id: id },
-      });
 
-      result.map((user) => {
-        user._id = user._id.toString();
+  async findUserById(id: string): Promise<UserEntity | null> {
+    try {
+      const result = await this.mongoRepository.findOne({
+        where:{_id: new ObjectId(id)},
       });
+      // const result = await this.mongoRepository.findOne({
+      //   where: { _id: id },
+      // });
       return result;
     } catch (error) {
       throw new Error(`${error}, User not found`);
     }
   }
+
+   
+  // async findUserById(id: ObjectId): Promise<any> {
+  //   try {
+  //     const result = await this.mongoRepository.findOne({
+  //       where: { _id: id },
+  //     });
+
+  //     console.log('ssssssssssssssssssss', result)
+  //     if(!result){
+  //       return null;
+  //     }else {
+  //       return result;
+  //     }
+
+      // result.map((user) => {
+      //   user._id = user._id.toString();
+      // });
+      
+  //   } catch (error) {
+  //     throw new Error(`${error}, User not found`);
+  //   }
+  // }
 
   async findUserByEmail(email: string): Promise<UserEntity | null> {
     try {
@@ -50,17 +72,17 @@ export class UserRepository extends Abstract<UserEntity> {
     }
   }
 
-  async findAllUsers(): Promise<UserEntity[]> {
-    try {
-      const result = await this.mongoRepository.find();
-      result.map((user) => {
-        user._id = user._id.toString();
-      });
-      return result;
-    } catch (error) {
-      throw new Error(`${error}, User list not found`);
-    }
-  }
+  // async findAllUsers(): Promise<UserEntity[]> {
+  //   try {
+  //     const result = await this.mongoRepository.find();
+  //     result.map((user) => {
+  //       user._id = user._id.toString();
+  //     });
+  //     return result;
+  //   } catch (error) {
+  //     throw new Error(`${error}, User list not found`);
+  //   }
+  // }
 
   async createUser(user: UserEntity): Promise<UserEntity> {
     try {
