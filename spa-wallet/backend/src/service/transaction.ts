@@ -35,16 +35,20 @@ export class TransactionService {
     body: TransactionEntity,
     userId: string
   ): Promise<TransactionEntity> {
+    
+    console.log("aaaaaaaa", id)
+    console.log("bbbbbbbbb", userId)
+    
     const transactionFromUser = await this.repository.findTransactionById(id)
 
-    if(userId !== transactionFromUser.userId) throw new Error("The transaction isnt yours!")
+    if(userId !== transactionFromUser?.userId) throw new Error("The transaction isnt yours!")
     return await this.repository.editTransaction(id, body)
   }
 
   async deleteTransaction(id: string, userId:string): Promise<string | void> {
     const transactionFromUser = await this.repository.findTransactionById(id)
 
-    if(userId !== transactionFromUser.userId) throw new Error("The transaction isnt yours!")
+    if(userId !== transactionFromUser?.userId) throw new Error("The transaction isnt yours!")
     
     
     await this.repository.deleteTransaction(id);

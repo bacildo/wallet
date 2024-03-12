@@ -9,17 +9,20 @@ export class TransactionRepository extends Abstract<TransactionEntity> {
   constructor() {
     super(Database.mongo, TransactionEntity);
   }
-  async findTransactionById(id: string): Promise<TransactionEntity> {
+  async findTransactionById(id: string): Promise<TransactionEntity | any> {
     try {
       const result = await this.mongoRepository.findOne({
-        select: ["created_at", "description", "type", "value", "userId"],
-        where: { _id: id },
+        where: { _id: new ObjectId(id) },
       });
+
       if (!result) {
-        throw new Error("Transaction not found");
+        console.log("Transaction not found for id:", id);
+      } else {
+        console.log("Transaction found:", result);
       }
       return result;
     } catch (error) {
+      console.error("Error finding transaction:", error);
       throw new Error(`${error}, Transaction not found`);
     }
   }
@@ -27,12 +30,10 @@ export class TransactionRepository extends Abstract<TransactionEntity> {
   async findAllTransactionsByUser(id: string): Promise<TransactionEntity[]> {
     try {
       const result = await this.mongoRepository.find({
-        select: ["created_at", "description", "type", "value"],
         where: { userId: id },
+        relations: ["user"],
       });
-      // result.map((user) => {
-      //   user.userId = user.userId.toString();
-      // });
+      console.log("CCCCCCC", result);
       return result;
     } catch (error) {
       throw new Error(`${error}, User list not found`);
@@ -56,7 +57,7 @@ export class TransactionRepository extends Abstract<TransactionEntity> {
   ): Promise<TransactionEntity> {
     try {
       const updatedTransaction = await this.mongoRepository.findOneAndUpdate(
-        { userId: new ObjectId(id) },
+        { _id: id },
         { $set: transaction },
         { returnDocument: "after" }
       );
@@ -65,7 +66,7 @@ export class TransactionRepository extends Abstract<TransactionEntity> {
       }
       return updatedTransaction.value;
     } catch (error) {
-      throw new Error(`${error}, User not updated`);
+      throw new Error(`${error}, Transaction not updated`);
     }
   }
 

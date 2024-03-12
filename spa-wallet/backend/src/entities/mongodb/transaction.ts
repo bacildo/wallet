@@ -23,9 +23,12 @@ export class TransactionEntity {
   @Column()
   type!: string;
 
-  @ManyToOne(() => UserEntity)
-  @JoinColumn({ name: "_id" })
-  userId!: UserEntity | string;
+  @ManyToOne(() => UserEntity, { eager: true })
+  @JoinColumn({ name: "userId", referencedColumnName: "_id" })
+  user!: UserEntity | string ;
+
+  @Column()
+  userId!: string;
 
   @CreateDateColumn()
   created_at!: Date;

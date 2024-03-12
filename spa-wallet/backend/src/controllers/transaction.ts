@@ -1,14 +1,13 @@
 import {
   Body,
   // Delete,
-  // Get,
+  Get,
   JsonController,
-  // Param,
+  Param,
   Post,
   Res,
   UseBefore,
-
-  // Put,
+  Put,
 } from "routing-controllers";
 import { Response } from "express";
 
@@ -46,14 +45,18 @@ export class TransactionController {
   //   }
   //   return people;
   // }
-  // @Get("/people")
-  // public async getAllPeople(): Promise<PeopleEntity[] | IPeople> {
-  //   const people = await this.people.findAllPeopleService();
-  //   if (!people.length) {
-  //     return notFoundPeople();
-  //   }
-  //   return people;
-  // }
+  @Get("/")
+  @UseBefore(validateToken)
+  public async getAllTransactionsById(@Res() res: Response): Promise<Response> {
+    const { _id: id } = res.locals.user;
+    try {
+      const transactions =
+        await this.transactionService.findAllTransactionsByUser(id);
+      return res.status(201).send(transactions);
+    } catch (error) {
+      return res.status(401).send(error);
+    }
+  }
 
   @Post("/")
   @UseBefore(validateToken)
@@ -61,9 +64,8 @@ export class TransactionController {
     @Body() transact: TransactionEntity,
     @Res() res: Response
   ): Promise<any> {
-   
     const { _id: id } = res.locals.user;
-    console.log('sdsddsdsdds',res.locals.user)
+    console.log("sdsddsdsdds", res.locals.user);
     try {
       const transaction = await this.transactionService.registerTransaction(
         transact,
@@ -75,14 +77,28 @@ export class TransactionController {
     }
   }
 
-  // }
-  // @Put("/people/:id")
-  // public async updatePerson(
-  //   @Param("id") id: string,
-  //   @Body() people: PeopleEntity
-  // ): Promise<PeopleEntity | IPeople> {
-  //   return await this.people.editPeopleService(id, people);
-  // }
+  @Put("/:id")
+  @UseBefore(validateToken)
+  public async update(
+    @Param("id") id: string,
+    @Body() body: TransactionEntity,
+    @Res() res: Response
+  ): Promise<Response> {
+    const { _id: userId } = res.locals.user;
+    const userIdToString = userId.toString()
+    console.log("sdsddsddsdds", res.locals.user._id);
+    try {
+      console.log('xxxxxxx',userIdToString)
+      console.log('zzzzzzz',id)
+      await this.transactionService.editTransaction(id, body, 
+        userIdToString
+        );
+      return res.send({ message: "success!" });
+    } catch (error) {
+      return res.status(500).send(error);
+    }
+  }
+
   // @Delete("/people/:id")
   // public async deletePerson(@Param("id") id: string): Promise<string> {
   //   const objectId = new ObjectId(id);

@@ -18,7 +18,7 @@ import {
   // PeopleGenerateCSVFiles,
   UserService,
 } from "../service";
-import { ILogin, notFoundPeople } from "../interfaces";
+import { ILogin } from "../interfaces";
 // import { ObjectId } from "mongodb";
 // import { AuthMiddleware } from "../middlewares";
 
@@ -67,12 +67,11 @@ export class UserController {
     @Body() user: ILogin,
     @Res() res: Response
   ): Promise<any> {
-    const token = await this.userService.loginUser(user.email, user.password);
-
-    if (!token) {
-      notFoundPeople();
-    } else {
-      res.status(200).send(token);
+    try {
+      const token = await this.userService.loginUser(user.email, user.password);
+      return res.status(201).send(token);
+    } catch (error) {
+      return res.status(401).send(error);
     }
   }
 
