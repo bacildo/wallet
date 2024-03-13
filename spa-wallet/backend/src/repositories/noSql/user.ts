@@ -17,9 +17,6 @@ export class UserRepository extends Abstract<UserEntity> {
       const result = await this.mongoRepository.findOne({
         where:{_id: new ObjectId(id)},
       });
-      // const result = await this.mongoRepository.findOne({
-      //   where: { _id: id },
-      // });
       return result;
     } catch (error) {
       throw new Error(`${error}, User not found`);

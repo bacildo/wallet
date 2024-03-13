@@ -24,6 +24,7 @@ export default function Home() {
   async function getUser() {
     try {
       const user = await loggedIn();
+      console.log("userHOme",user)
       setUserData(user.data);
     } catch (error) {
       setErrorsApi(error.message);

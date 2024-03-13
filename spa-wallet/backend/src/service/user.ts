@@ -28,6 +28,12 @@ export class UserService {
     });
   }
 
+  async loggedUser(id:string){
+    const user = await this.repository.findUserById(id)
+    if(!user) throw new Error("User not found!");
+    return user;
+  }
+
   async loginUser(email: string, password: string): Promise<string> {
     const userVerify = await this.repository.findUserByEmail(email);
     if (!userVerify) {

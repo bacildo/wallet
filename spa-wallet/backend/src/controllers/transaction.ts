@@ -30,7 +30,7 @@ export class TransactionController {
     this.transactionService = new TransactionService();
   }
 
-  @Get("/")
+  @Get("/transaction")
   @UseBefore(validateToken)
   public async getAllTransactionsById(@Res() res: Response): Promise<Response> {
     const { _id: id } = res.locals.user;
@@ -43,7 +43,7 @@ export class TransactionController {
     }
   }
 
-  @Post("/")
+  @Post("/transaction")
   @UseBefore(validateToken)
   public async createTransaction(
     @Body() transact: TransactionEntity,
@@ -61,7 +61,7 @@ export class TransactionController {
     }
   }
 
-  @Put("/:id")
+  @Put("/transaction/:id")
   @UseBefore(validateToken)
   public async updateTransaction(
     @Param("id") id: string,
@@ -77,7 +77,7 @@ export class TransactionController {
       return res.status(500).send({ message: "Transaction update failed!" });
     }
   }
-  @Delete("/:id")
+  @Delete("/transaction/:id")
   @UseBefore(validateToken)
   public async deleteTransaction(
     @Param("id") id: string,

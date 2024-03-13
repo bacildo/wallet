@@ -1,16 +1,16 @@
 import {
   Body,
   // Delete,
-  // Get,
+  Get,
   JsonController,
   // Param,
   Post,
   Res,
-
   // Put,
+  UseBefore,
 } from "routing-controllers";
 import { Response } from "express";
-
+import { validateToken } from "../middlewares";
 import { Service } from "typedi";
 import { UserEntity } from "../entities";
 // import { IPeople, JsonPeople, notFoundPeople } from "../interfaces";
@@ -34,25 +34,20 @@ export class UserController {
     // this.peopleGenerateCSVFiles = new PeopleGenerateCSVFiles();
     this.userService = new UserService();
   }
-  // @Get("/people/:id")
-  // public async getPerson(
-  //   @Param("id") id: string
-  // ): Promise<PeopleEntity[] | IPeople> {
-  //   const objectId = new ObjectId(id);
-  //   const people = await this.people.findPersonService(objectId);
-  //   if (!people.length) {
-  //     return notFoundPeople();
-  //   }
-  //   return people;
-  // }
-  // @Get("/people")
-  // public async getAllPeople(): Promise<PeopleEntity[] | IPeople> {
-  //   const people = await this.people.findAllPeopleService();
-  //   if (!people.length) {
-  //     return notFoundPeople();
-  //   }
-  //   return people;
-  // }
+
+  @Get("/me")
+  @UseBefore(validateToken)
+  public async userLogged(@Res() res: Response): Promise<Response> {
+    const { _id: id } = res.locals.user;
+
+    try {
+      const me = await this.userService.loggedUser(id);
+      return res.status(201).send(me);
+    } catch (error) {
+      return res.status(401).send({ message: "User not found!" });
+    }
+  }
+
   @Post("/register")
   public async registerUser(@Body() user: UserEntity): Promise<UserEntity> {
     if (Object.keys(user).length == 0) {
