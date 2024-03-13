@@ -34,26 +34,32 @@ export class TransactionService {
     body: TransactionEntity,
     userId: string
   ): Promise<TransactionEntity> {
-    
-    console.log("TransactionId", id)
-    console.log("userId", userId)
-    
-    const transactionFromUser = await this.repository.findTransactionById(id)
-     
+    const transactionFromUser = await this.repository.findTransactionById(id);
+
     if (!transactionFromUser) {
       throw new Error(`Transaction with id ${id} not found`);
     }
 
-    if(userId !== transactionFromUser.userId) throw new Error("The transaction isnt yours!")
-    return await this.repository.editTransaction(id, body)
+    if (userId !== transactionFromUser.userId)
+      throw new Error("The transaction isnt yours!");
+    return await this.repository.editTransaction(id, body);
   }
 
-  async deleteTransaction(id: string, userId:string): Promise<string | void> {
-    const transactionFromUser = await this.repository.findTransactionById(id)
+  async deleteTransaction(
+    id: string,
+    userId: string
+  ): Promise<TransactionEntity> {
+    const transactionFromUser = await this.repository.findTransactionById(id);
 
-    if(userId !== transactionFromUser?.userId) throw new Error("The transaction isnt yours!")
-    
-    
-    await this.repository.deleteTransaction(id);
+    if (!transactionFromUser) {
+      throw new Error(`Transaction with id ${id} not found`);
+    }
+    console.log("userIdFromTransaction", transactionFromUser.userId);
+    console.log("userIdFromService", userId);
+
+    if (userId !== transactionFromUser.userId.toString())
+      throw new Error("The transaction isnt yours!");
+
+    return await this.repository.deleteTransaction(id);
   }
 }

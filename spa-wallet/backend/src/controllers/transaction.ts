@@ -1,6 +1,6 @@
 import {
   Body,
-  // Delete,
+  Delete,
   Get,
   JsonController,
   Param,
@@ -10,41 +10,26 @@ import {
   Put,
 } from "routing-controllers";
 import { Response } from "express";
-
 import { Service } from "typedi";
 import { TransactionEntity } from "../entities";
-// import { IPeople, JsonPeople, notFoundPeople } from "../interfaces";
 import {
   // PeopleGenerateCSVFiles,
   TransactionService,
 } from "../service";
 import { validateToken } from "../middlewares";
 // import { ObjectId } from "mongodb";
-// import { AuthMiddleware } from "../middlewares";
 
 @Service()
 @JsonController()
 export class TransactionController {
-  // private userAuth: AuthMiddleware;
   private transactionService: TransactionService;
   // private peopleGenerateCSVFiles: PeopleGenerateCSVFiles;
 
   constructor() {
-    // this.userAuth = new AuthMiddleware();
     // this.peopleGenerateCSVFiles = new PeopleGenerateCSVFiles();
     this.transactionService = new TransactionService();
   }
-  // @Get("/people/:id")
-  // public async getPerson(
-  //   @Param("id") id: string
-  // ): Promise<PeopleEntity[] | IPeople> {
-  //   const objectId = new ObjectId(id);
-  //   const people = await this.people.findPersonService(objectId);
-  //   if (!people.length) {
-  //     return notFoundPeople();
-  //   }
-  //   return people;
-  // }
+
   @Get("/")
   @UseBefore(validateToken)
   public async getAllTransactionsById(@Res() res: Response): Promise<Response> {
@@ -54,7 +39,7 @@ export class TransactionController {
         await this.transactionService.findAllTransactionsByUser(id);
       return res.status(201).send(transactions);
     } catch (error) {
-      return res.status(401).send(error);
+      return res.status(401).send({ message: "Transaction not found!" });
     }
   }
 
@@ -65,7 +50,6 @@ export class TransactionController {
     @Res() res: Response
   ): Promise<any> {
     const { _id: id } = res.locals.user;
-    console.log("sdsddsdsdds", res.locals.user);
     try {
       const transaction = await this.transactionService.registerTransaction(
         transact,
@@ -73,13 +57,13 @@ export class TransactionController {
       );
       return res.status(201).send(transaction);
     } catch (error) {
-      return res.status(401).send(error);
+      return res.status(401).send({ message: "Transaction register failed!" });
     }
   }
 
   @Put("/:id")
   @UseBefore(validateToken)
-  public async update(
+  public async updateTransaction(
     @Param("id") id: string,
     @Body() body: TransactionEntity,
     @Res() res: Response
@@ -90,20 +74,27 @@ export class TransactionController {
       await this.transactionService.editTransaction(id, body, userIdToString);
       return res.send({ message: "success!" });
     } catch (error) {
-      return res.status(500).send(error);
+      return res.status(500).send({ message: "Transaction update failed!" });
     }
   }
+  @Delete("/:id")
+  @UseBefore(validateToken)
+  public async deleteTransaction(
+    @Param("id") id: string,
+    @Res() res: Response
+  ): Promise<Response> {
+    const { _id: userId } = res.locals.user;
+    const userIdToString = userId.toString();
 
-  // @Delete("/people/:id")
-  // public async deletePerson(@Param("id") id: string): Promise<string> {
-  //   const objectId = new ObjectId(id);
-  //   try {
-  //     await this.people.deletePeopleService(objectId);
-  //     return "Person deleted successfully";
-  //   } catch (error) {
-  //     throw new Error(`Error deleting person: ${error}`);
-  //   }
-  // }
+    console.log("userFromController", userIdToString);
+    console.log("IdFromController", id);
+    try {
+      await this.transactionService.deleteTransaction(id, userIdToString);
+      return res.send({ message: "success!" });
+    } catch (error) {
+      return res.status(500).send({ message: "Transaction delete failed!" });
+    }
+  }
   // @Get("/people-csv")
   // public async getAllPeopleCsv(): Promise<
   //   { message: string } | { data: IPeople[] }

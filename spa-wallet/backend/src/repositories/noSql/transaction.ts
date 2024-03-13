@@ -71,16 +71,18 @@ export class TransactionRepository extends Abstract<TransactionEntity> {
     }
   }
 
-  async deleteTransaction(id: string): Promise<string | void> {
+  async deleteTransaction(id: string): Promise<any> {
     try {
       const result = await this.mongoRepository.deleteOne({
         _id: new ObjectId(id),
       });
 
+      console.log('resultRepositories', result)
+
       if (result.deletedCount === 0) {
         throw new Error(`User with id ${id} not found`);
       }
-      return `Transaction with id ${id} deleted successfully`;
+      return result;
     } catch (error) {
       throw new Error(`${error}, Transaction not deleted`);
     }
