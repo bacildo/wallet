@@ -84,8 +84,6 @@ export class TransactionRepository extends Abstract<TransactionEntity> {
         _id: new ObjectId(id),
       });
 
-      console.log("resultRepositories", result);
-
       if (result.deletedCount === 0) {
         throw new Error(`User with id ${id} not found`);
       }

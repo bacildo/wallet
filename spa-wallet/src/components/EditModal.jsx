@@ -20,7 +20,6 @@ const EditModal = ({ transaction, onSubmit, onCancel }) => {
 
     onSubmit(editedTransaction);
   };
-   console.log('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',editedTransaction)
   return (
     <div className="fixed inset-0 flex items-center justify-center z-50">
       <div className="bg-white w-96 rounded-lg p-6">

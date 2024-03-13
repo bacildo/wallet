@@ -23,28 +23,6 @@ export class UserRepository extends Abstract<UserEntity> {
     }
   }
 
-   
-  // async findUserById(id: ObjectId): Promise<any> {
-  //   try {
-  //     const result = await this.mongoRepository.findOne({
-  //       where: { _id: id },
-  //     });
-
-  //     console.log('ssssssssssssssssssss', result)
-  //     if(!result){
-  //       return null;
-  //     }else {
-  //       return result;
-  //     }
-
-      // result.map((user) => {
-      //   user._id = user._id.toString();
-      // });
-      
-  //   } catch (error) {
-  //     throw new Error(`${error}, User not found`);
-  //   }
-  // }
 
   async findUserByEmail(email: string): Promise<UserEntity | null> {
     try {
@@ -64,22 +42,10 @@ export class UserRepository extends Abstract<UserEntity> {
       });
       return token;
     } catch (error) {
-      console.error(error); // Log the error for debugging purposes
-      throw new Error("Failed to generate token"); // Throw a new error
+      console.error(error); 
+      throw new Error("Failed to generate token");
     }
   }
-
-  // async findAllUsers(): Promise<UserEntity[]> {
-  //   try {
-  //     const result = await this.mongoRepository.find();
-  //     result.map((user) => {
-  //       user._id = user._id.toString();
-  //     });
-  //     return result;
-  //   } catch (error) {
-  //     throw new Error(`${error}, User list not found`);
-  //   }
-  // }
 
   async createUser(user: UserEntity): Promise<UserEntity> {
     try {

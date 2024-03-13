@@ -1,10 +1,6 @@
 import { Service } from "typedi";
 import { TransactionEntity } from "../entities";
-// import { ObjectId } from "mongodb";
 import { TransactionRepository } from "../repositories/noSql/transaction";
-// import { ILogin } from "../interfaces";
-// import { configSecret } from "../config";
-// import jwt from "jsonwebtoken";
 
 @Service()
 export class TransactionService {

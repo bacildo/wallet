@@ -24,7 +24,6 @@ export default function Login() {
   async function handleForm(data) {
     try {
       const token = await loginUser(data);
-      console.log(token);
       Cookies.set("token", token.data, { expires: 1 });
       navigate("/");
     } catch (error) {

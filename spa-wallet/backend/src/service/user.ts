@@ -1,12 +1,7 @@
 import { Service } from "typedi";
 import { UserEntity } from "../entities";
 import { UserRepository } from "../repositories";
-// import { ObjectId } from "mongodb";
 import bcrypt from "bcrypt";
-// import { ILogin } from "../interfaces";
-// import { configSecret } from "../config";
-// import jwt from "jsonwebtoken";
-
 
 @Service()
 export class UserService {
@@ -16,7 +11,7 @@ export class UserService {
     this.repository = new UserRepository();
   }
 
-  async registerUser(body: UserEntity):Promise<UserEntity> {
+  async registerUser(body: UserEntity): Promise<UserEntity> {
     const passwordVerify = bcrypt.hashSync(body.password, 10);
     const userVerify = await this.repository.findUserByEmail(body.email);
 
@@ -28,9 +23,9 @@ export class UserService {
     });
   }
 
-  async loggedUser(id:string){
-    const user = await this.repository.findUserById(id)
-    if(!user) throw new Error("User not found!");
+  async loggedUser(id: string) {
+    const user = await this.repository.findUserById(id);
+    if (!user) throw new Error("User not found!");
     return user;
   }
 
@@ -39,7 +34,7 @@ export class UserService {
     if (!userVerify) {
       throw new Error("Email incorrect!");
     }
-    
+
     const passwordVerify = bcrypt.compareSync(password, userVerify.password);
     if (!passwordVerify) {
       throw new Error("Password incorrect!");
@@ -47,18 +42,4 @@ export class UserService {
 
     return await this.repository.generateToken(userVerify._id.toString());
   }
-
-
-
-
-  // async editPeopleService(
-  //   id: string,
-  //   people: PeopleEntity
-  // ): Promise<PeopleEntity> {
-  //   return await this.repository.editPerson(id, people);
-  // }
-
-  // async deletePeopleService(id: ObjectId): Promise<string | void> {
-  //   await this.repository.deletePerson(id);
-  // }
 }

@@ -20,8 +20,6 @@ export default function Transaction() {
   } = useForm({ resolver: zodResolver(transactionSchema) });
 
   async function handleForm(data) {
-
-    console.log(data)
     try {
       const body = await { ...data, type };
       console.log(body);
@@ -31,7 +29,6 @@ export default function Transaction() {
       setErrorsApi(error.message);
       console.error(error.message, error);
     }
-    console.log("daaaaaaaaaaaaata", data);
   }
 
   return (
@@ -60,7 +57,9 @@ export default function Transaction() {
           register={register}
           name="description"
         />
-        {errors.description && <ErrorsInput message={errors.description.message} />}
+        {errors.description && (
+          <ErrorsInput message={errors.description.message} />
+        )}
         <Button type="submit" title="Salvar" />
       </form>
     </div>
