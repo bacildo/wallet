@@ -24,9 +24,14 @@ export function deleteTransaction(id) {
   return response;
 }
 
-export function updateTransaction(id, data) {
-  const response = axios.put(`${BASE_URL}/${id}`, data, {
-    headers: { Authorization: `Bearer ${Cookies.get("token")}` },
-  });
-  return response;
+export async function updateTransaction(id, data) {
+  try {
+    const response = await axios.put(`${BASE_URL}/${id}`, data, {
+      headers: { Authorization: `Bearer ${Cookies.get("token")}` },
+    });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
 }
+

@@ -1,54 +1,90 @@
-import React from "react";
+import React, { useState } from "react";
 
 const EditModal = ({ transaction, onSubmit, onCancel }) => {
-  const [formData, setFormData] = React.useState({
-    description: transaction.description,
-    value: transaction.value,
+  const [editedTransaction, setEditedTransaction] = useState({
+    ...transaction,
   });
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      [name]: value,
-    }));
+  const handleTypeChange = (e) => {
+    setEditedTransaction({
+      ...editedTransaction,
+      type: e.target.value,
+    });
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    onSubmit(formData);
-  };
+  const handleSubmit = () => {
+    if (!editedTransaction.type) {
+      alert("Please select the transaction type.");
+      return;
+    }
 
+    onSubmit(editedTransaction);
+  };
+   console.log('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',editedTransaction)
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-      <div className="bg-white p-4 rounded shadow-lg">
-        <h2 className="text-xl font-semibold mb-4">Editar Transação</h2>
-        <form onSubmit={handleSubmit}>
-          <input
-            type="text"
-            name="description"
-            value={formData.description}
-            onChange={handleChange}
-            className="border border-gray-300 rounded p-2 mb-2"
-          />
-          <input
-            type="number"
-            name="value"
-            value={formData.value}
-            onChange={handleChange}
-            className="border border-gray-300 rounded p-2 mb-2"
-          />
-          <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded">
-            Salvar
+    <div className="fixed inset-0 flex items-center justify-center z-50">
+      <div className="bg-white w-96 rounded-lg p-6">
+        <h2 className="text-xl font-bold mb-4">Edit Transaction</h2>
+        <label htmlFor="type" className="block mb-2">
+          Type:
+        </label>
+        <select
+          id="type"
+          name="type"
+          value={editedTransaction.type}
+          onChange={handleTypeChange}
+          className="border border-gray-300 rounded-lg px-3 py-1 mb-4"
+        >
+          <option value="">Select</option>
+          <option value="input">Input</option>
+          <option value="output">Output</option>
+        </select>
+        <label htmlFor="description" className="block mb-2">
+          Description:
+        </label>
+        <input
+          type="text"
+          id="description"
+          name="description"
+          value={editedTransaction.description}
+          onChange={(e) =>
+            setEditedTransaction({
+              ...editedTransaction,
+              description: e.target.value,
+            })
+          }
+          className="border border-gray-300 rounded-lg px-3 py-1 mb-4 w-full"
+        />
+        <label htmlFor="value" className="block mb-2">
+          Value:
+        </label>
+        <input
+          type="number"
+          id="value"
+          name="value"
+          value={editedTransaction.value}
+          onChange={(e) =>
+            setEditedTransaction({
+              ...editedTransaction,
+              value: e.target.value,
+            })
+          }
+          className="border border-gray-300 rounded-lg px-3 py-1 mb-4 w-full"
+        />
+        <div className="flex justify-end">
+          <button
+            onClick={handleSubmit}
+            className="bg-blue-500 text-white px-4 py-2 rounded-lg mr-2"
+          >
+            Save
           </button>
           <button
-            type="button"
             onClick={onCancel}
-            className="bg-gray-300 text-gray-700 px-4 py-2 rounded ml-2"
+            className="bg-gray-300 text-gray-700 px-4 py-2 rounded-lg"
           >
-            Cancelar
+            Cancel
           </button>
-        </form>
+        </div>
       </div>
     </div>
   );

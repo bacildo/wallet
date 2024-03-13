@@ -18,7 +18,7 @@ export class TransactionRepository extends Abstract<TransactionEntity> {
       if (!result) {
         console.log("Transaction not found for id:", id);
       } else {
-        console.log("Transaction found:", result);
+        console.log("Transaction found:", id);
       }
       return result;
     } catch (error) {
@@ -57,13 +57,21 @@ export class TransactionRepository extends Abstract<TransactionEntity> {
     try {
       const updatedTransaction = await this.mongoRepository.findOneAndUpdate(
         { _id: new ObjectId(id) },
-        { $set: transaction },
+        {
+          $set: {
+            value: transaction.value,
+            description: transaction.description,
+            type: transaction.type,
+            userId: new ObjectId(transaction.userId),
+          },
+        },
         { returnDocument: "after" }
       );
-      
+
       if (!updatedTransaction || updatedTransaction.value === null) {
         throw new Error(`Transaction with id ${id} not found`);
       }
+
       return updatedTransaction.value;
     } catch (error) {
       throw new Error(`${error}, Transaction not updated`);
@@ -76,7 +84,7 @@ export class TransactionRepository extends Abstract<TransactionEntity> {
         _id: new ObjectId(id),
       });
 
-      console.log('resultRepositories', result)
+      console.log("resultRepositories", result);
 
       if (result.deletedCount === 0) {
         throw new Error(`User with id ${id} not found`);

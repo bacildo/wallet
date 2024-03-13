@@ -25,10 +25,10 @@ export class TransactionEntity {
 
   @ManyToOne(() => UserEntity, { eager: true })
   @JoinColumn({ name: "userId", referencedColumnName: "_id" })
-  user!: UserEntity | string ;
+  user!: UserEntity | string;
 
   @Column()
-  userId!: string;
+  userId!: ObjectId | string;
 
   @CreateDateColumn()
   created_at!: Date;

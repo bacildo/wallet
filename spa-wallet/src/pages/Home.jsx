@@ -28,6 +28,7 @@ export default function Home() {
   const [transactionIdToDelete, setTransactionIdToDelete] = useState(null);
   const [showEditModal, setShowEditModal] = useState(false);
   const [transactionToEdit, setTransactionToEdit] = useState(null);
+  const [selectedType, setSelectedType] = useState("");
 
   function tokenValidate() {
     const token = Cookies.get("token");
@@ -69,21 +70,23 @@ export default function Home() {
   }
   async function handleEditForm(data) {
     try {
+      const { _id, created_at, ...dataToSend } = data; 
       const updatedTransaction = await updateTransaction(
-        transactionToEdit._id,
-        data
+        data._id,
+        dataToSend
       );
-      // Atualize o estado das transações com a transação editada
-      setTransactions(
-        transactions.map((t) =>
+      setTransactions((prevTransactions) =>
+        prevTransactions.map((t) =>
           t._id === updatedTransaction._id ? updatedTransaction : t
         )
       );
       setShowEditModal(false);
+      getTransactions();
     } catch (error) {
       console.error("Erro ao editar transação:", error);
     }
   }
+  
 
   function calculateBalance(transaction) {
     let total = 0;
@@ -192,6 +195,7 @@ export default function Home() {
           transaction={transactionToEdit}
           onSubmit={handleEditForm}
           onCancel={() => setShowEditModal(false)}
+          selectedType={selectedType}
         />
       )}
     </main>

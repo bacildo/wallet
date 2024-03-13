@@ -40,7 +40,7 @@ export class TransactionService {
       throw new Error(`Transaction with id ${id} not found`);
     }
 
-    if (userId !== transactionFromUser.userId)
+    if (userId !== transactionFromUser.userId.toString())
       throw new Error("The transaction isnt yours!");
     return await this.repository.editTransaction(id, body);
   }
