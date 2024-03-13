@@ -85,9 +85,6 @@ export class TransactionController {
   ): Promise<Response> {
     const { _id: userId } = res.locals.user;
     const userIdToString = userId.toString();
-
-    console.log("userFromController", userIdToString);
-    console.log("IdFromController", id);
     try {
       await this.transactionService.deleteTransaction(id, userIdToString);
       return res.send({ message: "success!" });

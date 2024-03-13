@@ -16,3 +16,17 @@ export function createTransaction(body) {
   });
   return response;
 }
+
+export function deleteTransaction(id){
+  const response = axios.delete(`${BASE_URL}/${id}`, {
+    headers: { Authorization: `Bearer ${Cookies.get("token")}` },
+  });
+  return response;
+}
+
+export function editTransaction(id){
+  const response = axios.delete(`${BASE_URL}/${id}`, {
+    headers: { Authorization: `Bearer ${Cookies.get("token")}` },
+  });
+  return response;
+}
