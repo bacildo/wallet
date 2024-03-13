@@ -85,14 +85,9 @@ export class TransactionController {
     @Res() res: Response
   ): Promise<Response> {
     const { _id: userId } = res.locals.user;
-    const userIdToString = userId.toString()
-    console.log("sdsddsddsdds", res.locals.user._id);
+    const userIdToString = userId.toString();
     try {
-      console.log('xxxxxxx',userIdToString)
-      console.log('zzzzzzz',id)
-      await this.transactionService.editTransaction(id, body, 
-        userIdToString
-        );
+      await this.transactionService.editTransaction(id, body, userIdToString);
       return res.send({ message: "success!" });
     } catch (error) {
       return res.status(500).send(error);

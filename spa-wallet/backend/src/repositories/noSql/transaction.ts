@@ -57,10 +57,11 @@ export class TransactionRepository extends Abstract<TransactionEntity> {
   ): Promise<TransactionEntity> {
     try {
       const updatedTransaction = await this.mongoRepository.findOneAndUpdate(
-        { _id: id },
+        { _id: new ObjectId(id) },
         { $set: transaction },
         { returnDocument: "after" }
       );
+      
       if (!updatedTransaction || updatedTransaction.value === null) {
         throw new Error(`Transaction with id ${id} not found`);
       }

@@ -29,19 +29,22 @@ export class TransactionService {
     if (!id) throw new Error("User id is required!");
     return await this.repository.findAllTransactionsByUser(id);
   }
-
   async editTransaction(
     id: string,
     body: TransactionEntity,
     userId: string
   ): Promise<TransactionEntity> {
     
-    console.log("aaaaaaaa", id)
-    console.log("bbbbbbbbb", userId)
+    console.log("TransactionId", id)
+    console.log("userId", userId)
     
     const transactionFromUser = await this.repository.findTransactionById(id)
+     
+    if (!transactionFromUser) {
+      throw new Error(`Transaction with id ${id} not found`);
+    }
 
-    if(userId !== transactionFromUser?.userId) throw new Error("The transaction isnt yours!")
+    if(userId !== transactionFromUser.userId) throw new Error("The transaction isnt yours!")
     return await this.repository.editTransaction(id, body)
   }
 
