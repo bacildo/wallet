@@ -9,9 +9,12 @@ import wallet from "../assets/wallet.png";
 import Button from "../components/Button";
 import ErrorsInput from "../components/ErrorsInput";
 import Modal from "../components/Modal";
+import EditModal from "../components/EditModal";
+
 import {
   deleteTransaction,
   getAllTransactions,
+  updateTransaction,
 } from "../services/Transactions";
 import { loggedIn } from "../services/User";
 
@@ -23,6 +26,8 @@ export default function Home() {
   const [errorsApi, setErrorsApi] = useState("");
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [transactionIdToDelete, setTransactionIdToDelete] = useState(null);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [transactionToEdit, setTransactionToEdit] = useState(null);
 
   function tokenValidate() {
     const token = Cookies.get("token");
@@ -62,6 +67,23 @@ export default function Home() {
       console.error(error.message);
     }
   }
+  async function handleEditForm(data) {
+    try {
+      const updatedTransaction = await updateTransaction(
+        transactionToEdit._id,
+        data
+      );
+      // Atualize o estado das transações com a transação editada
+      setTransactions(
+        transactions.map((t) =>
+          t._id === updatedTransaction._id ? updatedTransaction : t
+        )
+      );
+      setShowEditModal(false);
+    } catch (error) {
+      console.error("Erro ao editar transação:", error);
+    }
+  }
 
   function calculateBalance(transaction) {
     let total = 0;
@@ -72,11 +94,13 @@ export default function Home() {
     });
     setBalance(total);
   }
+
   useEffect(() => {
     tokenValidate();
     getUser();
     getTransactions();
   }, []);
+
   return (
     <main className="flex flex-col items-center justify-center bg-zinc-900 rounded p-8 w-[60rem] h-[35rem] text-2xl">
       {errorsApi && <ErrorsInput message={errorsApi} />}
@@ -121,9 +145,10 @@ export default function Home() {
                     </span>
                     <span
                       onClick={() => {
-                        setShowConfirmModal(true);
-                        setTransactionIdToDelete(transaction._id);
+                        setTransactionToEdit(transaction);
+                        setShowEditModal(true);
                       }}
+                      style={{ cursor: "pointer" }}
                     >
                       <FaRegPenToSquare />
                     </span>
@@ -132,6 +157,7 @@ export default function Home() {
                         setShowConfirmModal(true);
                         setTransactionIdToDelete(transaction._id);
                       }}
+                      style={{ cursor: "pointer" }}
                     >
                       <IoTrash />
                     </span>
@@ -161,6 +187,13 @@ export default function Home() {
         onClose={() => setShowConfirmModal(false)}
         onConfirm={() => handleDelete(transactionIdToDelete)}
       />
+      {showEditModal && (
+        <EditModal
+          transaction={transactionToEdit}
+          onSubmit={handleEditForm}
+          onCancel={() => setShowEditModal(false)}
+        />
+      )}
     </main>
   );
 }

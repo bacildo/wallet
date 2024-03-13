@@ -17,15 +17,15 @@ export function createTransaction(body) {
   return response;
 }
 
-export function deleteTransaction(id){
+export function deleteTransaction(id) {
   const response = axios.delete(`${BASE_URL}/${id}`, {
     headers: { Authorization: `Bearer ${Cookies.get("token")}` },
   });
   return response;
 }
 
-export function editTransaction(id){
-  const response = axios.delete(`${BASE_URL}/${id}`, {
+export function updateTransaction(id, data) {
+  const response = axios.put(`${BASE_URL}/${id}`, data, {
     headers: { Authorization: `Bearer ${Cookies.get("token")}` },
   });
   return response;
