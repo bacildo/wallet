@@ -13,7 +13,6 @@ export default function Transaction() {
   const { type } = useParams();
   const navigate = useNavigate();
   const [errorsApi, setErrorsApi] = useState("");
-
   const {
     register,
     handleSubmit,
@@ -21,14 +20,18 @@ export default function Transaction() {
   } = useForm({ resolver: zodResolver(transactionSchema) });
 
   async function handleForm(data) {
+
+    console.log(data)
     try {
       const body = await { ...data, type };
+      console.log(body);
       await createTransaction(body);
       navigate("/");
     } catch (error) {
       setErrorsApi(error.message);
       console.error(error.message, error);
     }
+    console.log("daaaaaaaaaaaaata", data);
   }
 
   return (
@@ -50,14 +53,14 @@ export default function Transaction() {
           register={register}
           name="value"
         />
-        {errors.valor && <ErrorsInput message={errors.valor.message} />}
+        {errors.value && <ErrorsInput message={errors.value.message} />}
         <Input
           type="text"
           placeholder="Descrição"
           register={register}
           name="description"
         />
-        {errors.registro && <ErrorsInput message={errors.registro.message} />}
+        {errors.description && <ErrorsInput message={errors.description.message} />}
         <Button type="submit" title="Salvar" />
       </form>
     </div>

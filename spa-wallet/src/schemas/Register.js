@@ -2,7 +2,7 @@ import z from "zod";
 
 export const registerSchema = z
   .object({
-    fullName: z
+    name: z
       .string()
       .min(3, "O campo nome completo é obrigatório!")
       .toLowerCase(),

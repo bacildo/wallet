@@ -23,7 +23,7 @@ const router = createBrowserRouter([
     element: <Register />,
   },
   {
-    path: "/transactions/:param",
+    path: "/transaction/:type",
     element: <Transaction/>
   }
 ]);

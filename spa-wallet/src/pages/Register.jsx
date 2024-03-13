@@ -42,11 +42,11 @@ export default function Register() {
       >
         <Input
           type="text"
-          placeholder="Full Name"
+          placeholder="Nome"
           register={register}
-          name="fullName"
+          name="name"
         />
-        {errors.fullName && <ErrorsInput message={errors.fullName.message} />}
+        {errors.name && <ErrorsInput message={errors.name.message} />}
         <Input
           type="email"
           placeholder="Email"
@@ -56,21 +56,21 @@ export default function Register() {
         {errors.email && <ErrorsInput message={errors.email.message} />}
         <Input
           type="password"
-          placeholder="Password"
+          placeholder="Senha"
           register={register}
           name="password"
         />
         {errors.password && <ErrorsInput message={errors.password.message} />}
         <Input
           type="password"
-          placeholder="Confirm Password"
+          placeholder="Confirmar Senha"
           register={register}
           name="confirmPassword"
         />
         {errors.confirmPassword && (
           <ErrorsInput message={errors.confirmPassword.message} />
         )}
-        <Button type="submit" title="CONFIRM" />
+        <Button type="submit" title="CONFIRMAR" />
       </form>
     </div>
   );

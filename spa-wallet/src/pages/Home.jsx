@@ -24,7 +24,6 @@ export default function Home() {
   async function getUser() {
     try {
       const user = await loggedIn();
-      console.log("userHOme",user)
       setUserData(user.data);
     } catch (error) {
       setErrorsApi(error.message);
@@ -104,7 +103,7 @@ export default function Home() {
               <span
                 className={`${balance > 0 ? "text-green-800" : "text-red-800"}`}
               >
-                {balance}
+                R$ {balance}
               </span>
             </li>
           </ul>

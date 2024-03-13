@@ -33,7 +33,6 @@ export class TransactionRepository extends Abstract<TransactionEntity> {
         where: { userId: id },
         relations: ["user"],
       });
-      console.log("CCCCCCC", result);
       return result;
     } catch (error) {
       throw new Error(`${error}, User list not found`);
