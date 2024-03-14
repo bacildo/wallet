@@ -54,7 +54,7 @@ export default function Login() {
         {errors.email && <ErrorsInput message={errors.email.message} />}
         <Input
           type="password"
-          placeholder="Password"
+          placeholder="Senha"
           register={register}
           name="password"
         />
